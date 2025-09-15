@@ -28,18 +28,23 @@ public class OldPhoneKeyPad
             new Key { Label = "0", Values = new string[] { " " } } // 0 maps to a space
         };
 
-        // Test cases for OldPhonePad
-        Console.WriteLine("33# = " + OldPhonePad("33#"));                 // Expected: E
-        Console.WriteLine("227*# = " + OldPhonePad("227*#"));               // Expected: B
-        Console.WriteLine("4433555 555666# = " + OldPhonePad("4433555 555666#"));     // Expected: HELLO
-        Console.WriteLine("96667775553# = " + OldPhonePad("96667775553#"));// WORLD
-        Console.WriteLine("8 88777444666*664# = " + OldPhonePad("8 88777444666*664#"));  // Expected: TURING
-        Console.WriteLine("# = " + OldPhonePad("#"));           // "" (empty, immediate end)
-        Console.WriteLine("2*# = " + OldPhonePad("2*#"));         // "" (typed 2, then erased)
-        Console.WriteLine("0 0 0# = " + OldPhonePad("0 0 0#"));      // "   " (multiple spaces)
-        Console.WriteLine("2222# = " + OldPhonePad("2222#"));       // A (loop back to index 0)
-        Console.WriteLine("777*777# = " + OldPhonePad("777*777#"));    // R   (first 777 removed)
-        Console.WriteLine("4433555*5# = " + OldPhonePad("4433555*5#"));  // HEJ (L removed, replaced with K)
+        if(args.Length > 0){
+            Console.WriteLine($"Input: {args[0]}");
+            Console.WriteLine($"{args[0]} = " + OldPhonePad(args[0])); 
+        }else{
+            // Test cases for OldPhonePad
+            Console.WriteLine("33# = " + OldPhonePad("33#"));                 // Expected: E
+            Console.WriteLine("227*# = " + OldPhonePad("227*#"));               // Expected: B
+            Console.WriteLine("4433555 555666# = " + OldPhonePad("4433555 555666#"));     // Expected: HELLO
+            Console.WriteLine("96667775553# = " + OldPhonePad("96667775553#"));// WORLD
+            Console.WriteLine("8 88777444666*664# = " + OldPhonePad("8 88777444666*664#"));  // Expected: TURING
+            Console.WriteLine("# = " + OldPhonePad("#"));           // "" (empty, immediate end)
+            Console.WriteLine("2*# = " + OldPhonePad("2*#"));         // "" (typed 2, then erased)
+            Console.WriteLine("0 0 0# = " + OldPhonePad("0 0 0#"));      // "   " (multiple spaces)
+            Console.WriteLine("2222# = " + OldPhonePad("2222#"));       // A (loop back to index 0)
+            Console.WriteLine("777*777# = " + OldPhonePad("777*777#"));    // R   (first 777 removed)
+            Console.WriteLine("4433555*5# = " + OldPhonePad("4433555*5#"));  // HEJ (L removed, replaced with K)
+        }
     }
 
     // Decodes input string into a final word/message
@@ -147,3 +152,4 @@ public class Key
 
     public Key() { }
 }
+
