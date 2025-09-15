@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 public class OldPhoneKeyPad
 {
@@ -47,7 +48,7 @@ public class OldPhoneKeyPad
         string result = string.Empty;
 
         // Encode the raw input (group repeated key presses, handle *, space, #)
-        string encoded = encodePattern(input);
+        string encoded = EncodePattern(input);
 
         // Go through encoded string two characters at a time
         for (int i = 0; i < encoded.Length; i += 2)
@@ -73,66 +74,69 @@ public class OldPhoneKeyPad
     // I want to keep this method as "Public" for re-usability
     // Converts raw input (like "4433555 555666#") into a simplified pattern
     // Example: "33#" → "32#" (digit + number of times pressed)
-    public static String encodePattern(string input)
+    public static string EncodePattern(string input)
     {
-        string result = string.Empty;
+        if (string.IsNullOrEmpty(input))
+            return string.Empty;
 
-        char? previous = null; // Track last pressed key
-        int instance = 1;      // How many times same key is pressed
+        var result = new StringBuilder();
+        char? lastKey = null;   // Track previous pressed key
+        int pressCount = 0;     // Count consecutive presses
 
         foreach (char c in input)
         {
-            if (c == PauseKey)
+            if (c == PauseKey) // Space: finalize current key sequence
             {
-                // Space indicates we should close the current sequence
-                result += instance.ToString();
-                instance = 1;
-                previous = null;
+                if (lastKey.HasValue)
+                    result.Append(pressCount);
+
+                lastKey = null;
+                pressCount = 0;
                 continue;
             }
 
-            if (previous != null)
+            if (c == ReturnKey) // Backspace: remove last key + count safely
             {
-                if (c == previous)
-                {
-                    // Same key pressed again -> increase counter
-                    instance++;
-                }
-                else
-                {
-                    // Different key pressed -> close previous sequence
-                    result += instance.ToString();
-                    instance = 1;
+                result.Append(pressCount);
+                if (result.Length >= 2)
+                    result.Remove(result.Length - 2, 2);
+                lastKey = null;
+                pressCount = 0;
+                continue;
+            }
 
-                    // Append the new key if it's not * or space
-                    if (c != ReturnKey && c != PauseKey)
-                        result += c.ToString();
-                }
+            if (c == SendKey) // End of input
+            {
+                break;
+            }
+
+            // Same key pressed consecutively
+            if (lastKey.HasValue && lastKey.Value == c)
+            {
+                pressCount++;
             }
             else
             {
-                // First key in sequence
-                result += c.ToString();
-            }
+                // Different key pressed: finalize previous key
+                if (lastKey.HasValue)
+                    result.Append(pressCount);
 
-            previous = c;
+                // Append the current key if it's not special
+                if (c != PauseKey && c != ReturnKey)
+                    result.Append(c);
 
-            if (c == ReturnKey)
-            {
-                // Handle backspace: remove last key and count
-                result = result.Remove(result.Length - 2, 2);
-                previous = null;
-            }
-
-            if (c == SendKey)
-            {
-                // End of input -> stop processing
-                break;
+                lastKey = c;
+                pressCount = 1;
             }
         }
 
-        return result;
+        // Append the final key count if any
+        if (lastKey.HasValue)
+            result.Append(pressCount);
+
+        return result.ToString();
     }
+
 }
 
 // Represents a keypad button with label (digit) and possible values (letters/symbols)
