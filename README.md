@@ -27,7 +27,14 @@ Special characters:
 
 ### Input → Output Examples
 ```csharp
-OldPhonePad("33#")                  // Output: E
-OldPhonePad("227*#")                // Output: B
-OldPhonePad("4433555 555666#")      // Output: HELLO
-OldPhonePad("8 88777444666*664#")   // Output: TURING
+OldPhonePad("33#")                 // Expected: E
+OldPhonePad("227*#")               // Expected: B
+OldPhonePad("4433555 555666#")     // Expected: HELLO
+OldPhonePad("96667775553#")        // WORLD
+OldPhonePad("8 88777444666*664#")  // Expected: TURING
+OldPhonePad("#")                   // "" (empty, immediate end)
+OldPhonePad("2*#")                 // "" (typed 2, then erased)
+OldPhonePad("0 0 0#")              // "   " (multiple spaces)
+OldPhonePad("2222#")               // A (loop back to index 0)
+OldPhonePad("777*777#")            // R   (first 777 removed)
+OldPhonePad("4433555*5#")          // HEJ (L removed, replaced with J)
