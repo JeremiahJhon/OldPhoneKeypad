@@ -38,3 +38,11 @@ OldPhonePad("0 0 0#")              // "   " (multiple spaces)
 OldPhonePad("2222#")               // A (loop back to index 0)
 OldPhonePad("777*777#")            // R   (first 777 removed)
 OldPhonePad("4433555*5#")          // HEJ (L removed, replaced with J)
+
+
+# Docker
+docker build -t oldphonekeypad -f DockerFile .
+
+docker run --rm oldphonekeypad
+
+docker run --rm oldphonekeypad "4433555 555666#"
